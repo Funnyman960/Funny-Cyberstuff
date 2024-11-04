@@ -1,0 +1,81 @@
+bash
+#!/bin/bash
+
+# Script to secure Linux Mint for CyberPatriot competition, including ClamAV installation
+
+# Function to update the system
+update_system() {
+    echo "Updating the system..."
+    sudo apt update && sudo apt upgrade -y
+}
+
+# Function to install necessary security tools
+install_security_tools() {
+    echo "Installing necessary security tools..."
+    sudo apt install -y ufw fail2ban lynis clamav clamtk
+}
+
+# Function to configure the firewall
+configure_firewall() {
+    echo "Configuring the firewall..."
+    sudo ufw default deny incoming
+    sudo ufw default allow outgoing
+    sudo ufw allow ssh
+    sudo ufw enable
+}
+
+# Function to disable unnecessary services
+disable_unnecessary_services() {
+    echo "Disabling unnecessary services..."
+    sudo systemctl disable avahi-daemon
+    sudo systemctl stop avahi-daemon
+    sudo systemctl disable cups
+    sudo systemctl stop cups
+}
+
+# Function to enforce strong password policies
+enforce_password_policy() {
+    echo "Enforcing strong password policies..."
+    sudo apt install -y libpam-cracklib
+    sudo sed -i 's/# minlen = 8/minlen = 12/' /etc/security/pwquality.conf
+    sudo sed -i 's/# maxrepeat = 3/maxrepeat = 3/' /etc/security/pwquality.conf
+}
+
+# Function to install security updates automatically
+enable_automatic_updates() {
+    echo "Enabling automatic updates..."
+    sudo apt install -y unattended-upgrades
+    sudo dpkg-reconfigure --priority=low unattended-upgrades
+}
+
+# Function to perform a security audit
+perform_security_audit() {
+    echo "Performing a security audit..."
+    sudo lynis audit system
+}
+
+# Function to install and configure ClamAV
+install_and_configure_clamav() {
+    echo "Installing and configuring ClamAV..."
+    sudo freshclam  # Update ClamAV's virus database
+    sudo systemctl enable clamav-freshclam  # Enable freshclam service
+    sudo systemctl start clamav-freshclam  # Start freshclam service
+    echo "ClamAV installed and configured successfully."
+}
+
+# Main script execution
+main() {
+    echo "Starting security hardening..."
+    update_system
+    install_security_tools
+    configure_firewall
+    disable_unnecessary_services
+    enforce_password_policy
+    enable_automatic_updates
+    install_and_configure_clamav
+    perform_security_audit
+    echo "Security hardening complete!"
+}
+
+# Run the main function
+main

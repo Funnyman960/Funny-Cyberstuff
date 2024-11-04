@@ -1,0 +1,77 @@
+powershell
+# PowerShell Script to Secure Windows 11 for CyberPatriot Competition
+
+# Run the script as an administrator
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Please run this script as an administrator."
+    exit
+}
+
+# Function to update Windows
+function Update-Windows {
+    Write-Host "Updating Windows..."
+    Start-Process -FilePath "powershell" -ArgumentList "Install-WindowsUpdate -AcceptAll -AutoReboot" -Verb RunAs
+}
+
+# Function to enable Windows Defender
+function Enable-WindowsDefender {
+    Write-Host "Enabling Windows Defender..."
+    Set-MpPreference -DisableRealtimeMonitoring $false
+    Start-Service -Name WinDefend
+}
+
+# Function to configure the Windows Firewall
+function Configure-Firewall {
+    Write-Host "Configuring Windows Firewall..."
+    Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+    New-NetFirewallRule -DisplayName "Allow SSH" -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
+}
+
+# Function to disable unnecessary services
+function Disable-UnnecessaryServices {
+    Write-Host "Disabling unnecessary services..."
+    $servicesToDisable = @("Fax", "PrintSpooler", "XblGameSave")
+    foreach ($service in $servicesToDisable) {
+        if (Get-Service -Name $service -ErrorAction SilentlyContinue) {
+            Stop-Service -Name $service -Force
+            Set-Service -Name $service -StartupType Disabled
+            Write-Host "Disabled $service service."
+        }
+    }
+}
+
+# Function to enforce strong password policies
+function Enforce-PasswordPolicy {
+    Write-Host "Enforcing strong password policies..."
+    # Set password policy for minimum length and complexity
+    net accounts /minpwlen:12
+    net accounts /maxpwage:30
+    net accounts /passwordreq:yes
+}
+
+# Function to enable BitLocker (if applicable)
+function Enable-BitLocker {
+    Write-Host "Enabling BitLocker..."
+    $volumes = Get-BitLockerVolume
+    foreach ($volume in $volumes) {
+        if ($volume.ProtectionStatus -eq 'Off') {
+            Enable-BitLocker -MountPoint $volume.MountPoint -EncryptionMethod XtsAes256 -Password (ConvertTo-SecureString -AsPlainText "YourSecurePassword" -Force)
+            Write-Host "Enabled BitLocker on $($volume.MountPoint)."
+        }
+    }
+}
+
+# Main script execution
+function Main {
+    Write-Host "Starting security hardening..."
+    Update-Windows
+    Enable-WindowsDefender
+    Configure-Firewall
+    Disable-UnnecessaryServices
+    Enforce-PasswordPolicy
+    Enable-BitLocker
+    Write-Host "Security hardening complete!"
+}
+
+# Run the main function
+Main

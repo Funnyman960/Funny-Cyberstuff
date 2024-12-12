@@ -1,41 +1,42 @@
 
 $option = Read-Host '
+#EDITED AND MAINTAINED BY FUNNYMAN960, BLANK NUMBERS ARE USELESS FOR CHS'S SKILL LEVEL. THIS IS A COMBANATION OF SEVERAL POSSIBLE PROBLEMS WITH THE WINDOWS MACHINE IF NEEDED I WILL ADD BACK SOME USES, BUT SO FAR NONE ARE NEEDED.
 1. WinPeas Scanning 
 2. StickyKeyChecker (add checks for svol)
-3. Firewall
+3. Firewall Go brrrr
 4. Server GPMC Clean + Import
 5. Find "sus" services 
 6. Local User/Group Script 
 7. Changing Passwords (CHANGE YOUR ADMIN PASS RIGHR AFTER RUNNING THIS)
-8. AD User/Group Script (not working rip do yourself)
+8. 
 9. Services 
 10.  
 11. Post-Kitty Secuirty
-12. Clean GPO (DO NOT RUN THIS ON REAL COMP ROUNDS)
+12. 
 13.
 14. Find Schedualed Tasks 
 15. AD User Config
-17. System32 ACLs (dont run)
+17. 
 18. LDAP/ CA SSL Cert 
 19. DNS & DHCP Sec 
 20. 
-21. Kitty Power AD
-22. Kitty Power
+21. 
+22. 
 23. Features Server
 24. Enable RDP & Secure RDP
 25. Config Imports  
 26. IIS Sec (make sure to turn on custom error pages)
-27. Blueteam Persitence Sniper
-28. Update Software 
-29. BPA Scan 
-30. SQL Hardening 
+27. 
+28. Update Software (DO NEAR END BRUV) 
+29. BPA Scan (Probably Plastic)
+30. SQL Hardening (YEPPPEPEPEP) 
 31. PowerShell Hardening (Do At the End XD)
 32. RID Hijacking Test
 33. Detect Hidden Windows Tasks 
 34. BitsAdmin Job Check
 35. ACL Perms Tool
 36. AD SEC 
-37. ChatGPT  
+37. AI+funny key (maybe will use later)  
 38. Remove User Dirs (li too funny)
 39. Remove unsigned/nonsecure dlls
 40. Find all unsigned File 

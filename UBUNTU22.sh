@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# Ensure the script is run as root
+# This better work or ima be pissed
+# Run as root bruv
 if [ "$(id -u)" -ne 0 ]; then
     echo "Please run this script as root."
     exit 1
@@ -15,13 +15,13 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw enable
 
-# Enforce strong password policy
+# funny ahh password
 echo "Enforcing password policy..."
 apt-get install -y libpam-cracklib
 sed -i '/pam_unix.so/ s/$/ remember=5 minlen=8/' /etc/pam.d/common-password
 sed -i '/pam_cracklib.so/ s/$/ ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1/' /etc/pam.d/common-password
 
-# Set password aging
+# Set password 90 day count
 echo "Configuring password aging..."
 sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
 sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS   10/' /etc/login.defs
@@ -39,7 +39,7 @@ elif [ -f /etc/lightdm/users.conf ]; then
     echo "allow-guest=false" >> /etc/lightdm/users.conf
 fi
 
-# Disable FTP services if installed
+# Disable FTP services if installed: aka Fortnite topographic services
 echo "Disabling FTP services if found..."
 for service in vsftpd pure-ftpd; do
     if systemctl is-active --quiet $service; then

@@ -39,16 +39,6 @@ elif [ -f /etc/lightdm/users.conf ]; then
     echo "allow-guest=false" >> /etc/lightdm/users.conf
 fi
 
-# Disable FTP services if installed: aka Fortnite topographic services
-echo "Disabling FTP services if found..."
-for service in vsftpd pure-ftpd; do
-    if systemctl is-active --quiet $service; then
-        echo "Disabling and stopping $service..."
-        systemctl stop $service
-        systemctl disable $service
-        apt-get remove --purge -y $service
-    fi
-done
 
 # Enable automatic updates
 echo "Enabling automatic updates..."
